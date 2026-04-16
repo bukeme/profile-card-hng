@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Testable Profile Card</title>
+    <style>
+      :root {
+        --bg: #f4f7fb;
+        --card: #ffffff;
+        --text: #1f2937;
+        --muted: #6b7280;
+        --border: #d7deea;
+        --accent: #2563eb;
+        --accent-dark: #1d4ed8;
+        --focus: #0f172a;
+        --soft: #eef4ff;
+        --danger-soft: #fff1f2;
+        --shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+        --radius: 20px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        font-family: Arial, Helvetica, sans-serif;
+        background: linear-gradient(180deg, #eef4ff 0%, var(--bg) 100%);
+        color: var(--text);
+        display: grid;
+        place-items: center;
+        padding: 24px;
+      }
+
+      .page-shell {
+        width: 100%;
+        max-width: 980px;
+      }
+
+      article {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow);
+        overflow: hidden;
+      }
+
+      .profile-card {
+        display: grid;
+        grid-template-columns: 1fr;
+      }
+
+      .profile-hero {
+        padding: 24px;
+        display: grid;
+        gap: 20px;
+        grid-template-columns: 1fr;
+        align-items: start;
+      }
+
+      .avatar-wrap {
+        display: flex;
+        justify-content: center;
+      }
+
+      figure {
+        margin: 0;
+        display: grid;
+        justify-items: center;
+        gap: 12px;
+      }
+
+      img {
+        width: 180px;
+        height: 180px;
+        object-fit: cover;
+        border-radius: 50%;
+        border: 6px solid #fff;
+        box-shadow: 0 12px 24px rgba(15, 23, 42, 0.12);
+        background: #e5e7eb;
+      }
+
+      .profile-content {
+        display: grid;
+        gap: 18px;
+      }
+
+      header {
+        display: grid;
+        gap: 10px;
+      }
+
+      h2 {
+        margin: 0;
+        font-size: clamp(1.6rem, 3vw, 2.4rem);
+        line-height: 1.1;
+        letter-spacing: -0.02em;
+      }
+
+      .bio {
+        margin: 0;
+        font-size: 1rem;
+        line-height: 1.7;
+        color: var(--muted);
+        max-width: 62ch;
+        word-wrap: break-word;
+        overflow-wrap: anywhere;
+      }
+
+      .time-box {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 12px 14px;
+        background: var(--soft);
+        border: 1px solid #dbe7ff;
+        border-radius: 14px;
+        width: fit-content;
+        max-width: 100%;
+      }
+
+      .time-label {
+        font-weight: 700;
+        color: var(--accent-dark);
+        white-space: nowrap;
+      }
+
+      .time-value {
+        font-variant-numeric: tabular-nums;
+        word-break: break-word;
+      }
+
+      .socials {
+        padding: 0 24px 24px;
+      }
+
+      .section-group {
+        display: grid;
+        gap: 18px;
+        grid-template-columns: 1fr;
+      }
+
+      section {
+        border-top: 1px solid var(--border);
+        padding: 20px 24px 24px;
+      }
+
+      .section-title {
+        margin: 0 0 12px;
+        font-size: 1.05rem;
+        color: var(--focus);
+      }
+
+      ul {
+        margin: 0;
+        padding-left: 20px;
+        display: grid;
+        gap: 10px;
+      }
+
+      li {
+        line-height: 1.6;
+        word-wrap: break-word;
+        overflow-wrap: anywhere;
+      }
+
+      nav ul {
+        list-style: none;
+        padding-left: 0;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+
+      nav li {
+        margin: 0;
+      }
+
+      a {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 14px;
+        border-radius: 999px;
+        text-decoration: none;
+        background: #f8fafc;
+        color: var(--accent-dark);
+        border: 1px solid var(--border);
+        transition: transform 0.15s ease, background 0.15s ease,
+          border-color 0.15s ease;
+      }
+
+      a:hover {
+        background: #eff6ff;
+        border-color: #bfd4ff;
+        transform: translateY(-1px);
+      }
+
+      a:focus-visible,
+      button:focus-visible,
+      input:focus-visible {
+        outline: 3px solid var(--focus);
+        outline-offset: 2px;
+      }
+
+      .controls {
+        padding: 0 24px 24px;
+        display: grid;
+        gap: 16px;
+      }
+
+      .control-panel {
+        border: 1px solid var(--border);
+        border-radius: 16px;
+        padding: 16px;
+        background: #fbfdff;
+        display: grid;
+        gap: 14px;
+      }
+
+      .control-grid {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 12px;
+      }
+
+      label {
+        display: grid;
+        gap: 6px;
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: var(--focus);
+      }
+
+      input[type="text"],
+      input[type="file"] {
+        width: 100%;
+        max-width: 100%;
+        padding: 12px 14px;
+        border-radius: 12px;
+        border: 1px solid var(--border);
+        background: #fff;
+        color: var(--text);
+        font: inherit;
+      }
+
+      button {
+        appearance: none;
+        border: none;
+        border-radius: 12px;
+        padding: 12px 16px;
+        background: var(--accent);
+        color: #fff;
+        font: inherit;
+        font-weight: 700;
+        cursor: pointer;
+        width: fit-content;
+        transition: background 0.15s ease, transform 0.15s ease;
+      }
+
+      button:hover {
+        background: var(--accent-dark);
+        transform: translateY(-1px);
+      }
+
+      .helper-text {
+        margin: 0;
+        color: var(--muted);
+        font-size: 0.92rem;
+        line-height: 1.5;
+      }
+
+      .status {
+        min-height: 1.2em;
+        font-size: 0.95rem;
+        color: var(--accent-dark);
+        font-weight: 700;
+      }
+
+      @media (min-width: 768px) {
+        .profile-hero {
+          grid-template-columns: 240px 1fr;
+          align-items: center;
+          padding: 32px;
+        }
+
+        .avatar-wrap {
+          justify-content: start;
+        }
+
+        .section-group {
+          grid-template-columns: 1fr 1fr;
+        }
+
+        .socials,
+        .controls {
+          padding-left: 32px;
+          padding-right: 32px;
+        }
+
+        section {
+          padding-left: 32px;
+          padding-right: 32px;
+        }
+
+        .control-grid {
+          grid-template-columns: 1.2fr 0.8fr auto;
+          align-items: end;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="page-shell">
+      <article data-testid="test-profile-card" aria-label="User profile card">
+        <div class="profile-hero">
+          <div class="avatar-wrap">
+            <figure data-testid="test-user-avatar-figure">
+              <img
+                data-testid="test-user-avatar"
+                id="avatar-image"
+                src="https://api.dicebear.com/9.x/avataaars/svg?seed=Ukeme"
+                alt="Avatar portrait of Ukeme Bassey"
+              />
+            </figure>
+          </div>
+
+          <div class="profile-content">
+            <header data-testid="test-profile-header">
+              <h2 data-testid="test-user-name">Ukeme Bassey</h2>
+              <p data-testid="test-user-bio" class="bio">
+                Frontend developer who enjoys building clean, responsive
+                interfaces with accessible HTML, modern CSS, and vanilla
+                JavaScript.
+              </p>
+            </header>
+
+            <div class="time-box" data-testid="test-user-time-box">
+              <span class="time-label" data-testid="test-user-time-label"
+                >Current time:</span
+              >
+              <span
+                class="time-value"
+                id="epoch-time"
+                data-testid="test-user-time"
+                aria-live="polite"
+                aria-atomic="true"
+              ></span>
+            </div>
+          </div>
+        </div>
+
+        <section
+          class="socials"
+          data-testid="test-user-socials-section"
+          aria-labelledby="social-links-title"
+        >
+          <h3
+            id="social-links-title"
+            class="section-title"
+            data-testid="test-user-social-links-title"
+          >
+            Social links
+          </h3>
+          <nav
+            data-testid="test-user-social-links"
+            aria-label="Social media links"
+          >
+            <ul data-testid="test-user-social-links-list">
+              <li data-testid="test-user-social-twitter-item">
+                <a
+                  data-testid="test-user-social-twitter"
+                  href="https://x.com/ukemebassey18"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Visit Twitter profile"
+                >
+                  Twitter
+                </a>
+              </li>
+              <li data-testid="test-user-social-github-item">
+                <a
+                  data-testid="test-user-social-github"
+                  href="https://github.com/bukeme"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Visit GitHub profile"
+                >
+                  GitHub
+                </a>
+              </li>
+              <li data-testid="test-user-social-linkedin-item">
+                <a
+                  data-testid="test-user-social-linkedin"
+                  href="https://www.linkedin.com/in/ukeme-bassey"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Visit LinkedIn profile"
+                >
+                  LinkedIn
+                </a>
+              </li>
+            </ul>
+          </nav>
+        </section>
+
+        <div class="section-group" data-testid="test-user-lists-group">
+          <section
+            data-testid="test-user-hobbies-section"
+            aria-labelledby="hobbies-title"
+          >
+            <h3
+              id="hobbies-title"
+              class="section-title"
+              data-testid="test-user-hobbies-title"
+            >
+              Hobbies
+            </h3>
+            <ul data-testid="test-user-hobbies">
+              <li data-testid="test-user-hobby-1">
+                Coding small UI components
+              </li>
+              <li data-testid="test-user-hobby-2">Reading tech articles</li>
+              <li data-testid="test-user-hobby-3">Listening to music</li>
+            </ul>
+          </section>
+
+          <section
+            data-testid="test-user-dislikes-section"
+            aria-labelledby="dislikes-title"
+          >
+            <h3
+              id="dislikes-title"
+              class="section-title"
+              data-testid="test-user-dislikes-title"
+            >
+              Dislikes
+            </h3>
+            <ul data-testid="test-user-dislikes">
+              <li data-testid="test-user-dislike-1">
+                Poorly structured layouts
+              </li>
+              <li data-testid="test-user-dislike-2">Hard-to-read text</li>
+              <li data-testid="test-user-dislike-3">Broken links</li>
+            </ul>
+          </section>
+        </div>
+
+        <section
+          class="controls"
+          data-testid="test-user-avatar-controls-section"
+          aria-labelledby="avatar-controls-title"
+        >
+          <h3
+            id="avatar-controls-title"
+            class="section-title"
+            data-testid="test-user-avatar-controls-title"
+          >
+            Update avatar
+          </h3>
+
+          <div class="control-panel">
+            <p class="helper-text" data-testid="test-user-avatar-help">
+              You can paste an image URL or upload a file. The card will show
+              the selected image.
+            </p>
+
+            <div class="control-grid">
+              <label data-testid="test-user-avatar-url-label" for="avatar-url">
+                Image URL
+                <input
+                  data-testid="test-user-avatar-url-input"
+                  id="avatar-url"
+                  type="text"
+                  placeholder="https://example.com/avatar.jpg"
+                  value="https://api.dicebear.com/9.x/avataaars/svg?seed=Ukeme"
+                />
+              </label>
+
+              <label
+                data-testid="test-user-avatar-file-label"
+                for="avatar-file"
+              >
+                Upload image
+                <input
+                  data-testid="test-user-avatar-file-input"
+                  id="avatar-file"
+                  type="file"
+                  accept="image/*"
+                />
+              </label>
+
+              <button
+                data-testid="test-user-avatar-update-button"
+                id="update-avatar"
+                type="button"
+              >
+                Update avatar
+              </button>
+            </div>
+
+            <p
+              class="status"
+              id="avatar-status"
+              data-testid="test-user-avatar-status"
+              aria-live="polite"
+            ></p>
+          </div>
+        </section>
+      </article>
+    </main>
+
+    <script>
+      const timeEl = document.getElementById("epoch-time");
+      const avatarImg = document.getElementById("avatar-image");
+      const avatarUrlInput = document.getElementById("avatar-url");
+      const avatarFileInput = document.getElementById("avatar-file");
+      const updateButton = document.getElementById("update-avatar");
+      const avatarStatus = document.getElementById("avatar-status");
+
+      function updateTime() {
+        timeEl.textContent = Date.now().toString();
+      }
+
+      function updateAvatarFromUrl(url) {
+        const trimmed = url.trim();
+        if (!trimmed) {
+          avatarStatus.textContent =
+            "Please enter an image URL or upload a file.";
+          return;
+        }
+
+        avatarImg.src = trimmed;
+        avatarStatus.textContent = "Avatar updated from the image URL.";
+      }
+
+      function updateAvatarFromFile(file) {
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = () => {
+          avatarImg.src = reader.result;
+          avatarStatus.textContent = "Avatar updated from the uploaded file.";
+        };
+        reader.readAsDataURL(file);
+      }
+
+      updateTime();
+      setInterval(updateTime, 1000);
+
+      updateButton.addEventListener("click", () => {
+        if (avatarFileInput.files && avatarFileInput.files[0]) {
+          updateAvatarFromFile(avatarFileInput.files[0]);
+          return;
+        }
+
+        updateAvatarFromUrl(avatarUrlInput.value);
+      });
+
+      avatarUrlInput.addEventListener("keydown", (event) => {
+        if (event.key === "Enter") {
+          updateButton.click();
+        }
+      });
+
+      avatarFileInput.addEventListener("change", () => {
+        if (avatarFileInput.files && avatarFileInput.files[0]) {
+          updateAvatarFromFile(avatarFileInput.files[0]);
+        }
+      });
+    </script>
+  </body>
+</html>
